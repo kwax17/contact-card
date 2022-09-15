@@ -15,9 +15,9 @@ export const initdb = async () => {
         console.log('contacts store created');
       }
     })
-  }
+};
 
-  // Export a function we will use to GET to the database.
+// Export a function we will use to GET to the database.
 export const getDb = async () => {
     console.log('GET from the database');
   
@@ -37,9 +37,9 @@ export const getDb = async () => {
     const result = await request;
     console.log('result.value', result);
     return result;
-  };
+};
 
-  // Export a function we will use to POST to the database.
+// Export a function we will use to POST to the database.
 export const postDb = async (name, email, phone, profile) => {
     console.log('POST to the database');
   
@@ -58,7 +58,7 @@ export const postDb = async (name, email, phone, profile) => {
     // Get confirmation of the request.
     const result = await request;
     console.log('🚀 - data saved to the database', result);
-  }
+};
 
 export const deleteDb = async (id) => {
   console.log('DELETE from the database', id);
@@ -94,5 +94,5 @@ export const editDb = async (id, name, email, phone, profile) => {
     const request = store.put({ id: id, name: name, email: email, phone: phone, profile: profile });
     const result = await request;
     console.log('🚀 - data saved to the database', result);
-  };
+};
   

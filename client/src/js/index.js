@@ -1,8 +1,7 @@
 // js files
-import { initdb, getDb, postDb } from './database';
+import { initdb, postDb, deleteDb, editDb } from './database';
 import { fetchCards } from "./cards";
 import { toggleForm, clearForm } from "./form";
-import { deleteDB } from 'idb';
 
 // Import CSS files
 import "../css/index.css";
@@ -22,9 +21,9 @@ window.addEventListener('load', function () {
     document.getElementById('logo').src = Logo;
     document.getElementById('bearThumbnail').src = Bear;
     document.getElementById('dogThumbnail').src = Dog;
-  });
+});
 
-    // Form functionality
+// Form functionality
 const form = document.getElementById("formToggle");
 const newContactButton = document.getElementById("new-contact");
 let submitBtnToUpdate = false;
@@ -32,25 +31,42 @@ let profileId;
 
 newContactButton.addEventListener('click', event => {
   toggleForm()
- })
+});
 
 form.addEventListener('submit', event => {
   // Handle data
   event.preventDefault();
-let name = document.getElementById("name").value;
-let phone = document.getElementById("phone").value;
-let email = document.getElementById("email").value;
-let profile = document.querySelector('input[type="radio"]:checked').value;
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+  let email = document.getElementById("email").value;
+  let profile = document.querySelector('input[type="radio"]:checked').value;
 
   // Post form data to IndexedDB OR Edit an existing card in IndexedDB
-if (submitBtnToUpdate == false) {
-  postDb(name, email, phone, profile);
-} else {
+  if (submitBtnToUpdate == false) {
+    postDb(name, email, phone, profile);
+  } else {
+    // Obtains values passed into the form element
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+  let email = document.getElementById("email").value;
+  let profile = document.querySelector('input[type="radio"]:checked').value;
+
+  // Calls the editDB function passing in any values from the form element as well as the ID of the contact that we are updating
+  editDb(profileId, name, email, phone, profile);
 
   fetchCards();
-    // Toggles the submit button back to POST functionality
+
+  // Toggles the submit button back to POST functionality
   submitBtnToUpdate = false;
-}
+  }
+
+  // Clear form
+  clearForm();
+  // Toggle form
+  toggleForm();
+  // Reload the DOM
+  fetchCards();
+});
 
 window.editCard = (e) => {
   // Grabs the id from the button element attached to the contact card and sets a global variable that will be used in the form element.
@@ -71,17 +87,10 @@ window.editCard = (e) => {
     submitBtnToUpdate = true;
 };
 
-deleteCard = (e) => {
+window.deleteCard = (e) => {
+  let id = parseInt(e.id);
   // Delete the card
   deleteDB();
   // Reload the DOM
   fetchCards();
 };
-
-// Clear form
-clearForm();
-// Toggle form
-toggleForm();
-// Reload the DOM
-fetchCards();
-});
